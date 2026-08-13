@@ -509,6 +509,22 @@ h3 {
   margin-bottom: 2rem;
 }
 
+.pricing-section-heading {
+  margin-top: 3rem;
+}
+
+.why-choose {
+  margin-top: 3rem;
+  text-align: center;
+}
+
+.check-list-centered {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+}
+
 .price-card {
   padding: 2rem 1.4rem;
   border-radius: var(--radius);
