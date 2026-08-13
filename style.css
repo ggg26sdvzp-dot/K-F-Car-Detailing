@@ -8,6 +8,8 @@
   --muted: #b7c0cd;
   --gold: #d4a64a;
   --gold-soft: #f0c86d;
+  --silver: #c0c0c0;
+  --silver-soft: #e8e8e8;
   --line: rgba(255, 255, 255, 0.12);
   --shadow: 0 24px 60px rgba(2, 5, 10, 0.35);
   --radius: 22px;
@@ -81,20 +83,6 @@ textarea {
 
 .section-accent {
   background: linear-gradient(180deg, rgba(212, 166, 74, 0.06), rgba(212, 166, 74, 0.12));
-}
-
-.eyebrow {
-  display: inline-block;
-  margin: 0 0 18px;
-  padding: 7px 12px;
-  border-radius: 999px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: var(--gold-soft);
-  background: rgba(212, 166, 74, 0.12);
-  border: 1px solid rgba(212, 166, 74, 0.35);
 }
 
 h1,
@@ -176,6 +164,12 @@ h3 {
   gap: 0.8rem;
   font-weight: 800;
   letter-spacing: 0.04em;
+}
+
+.brand img {
+  width: 110px;
+  height: 110px;
+  display: block;
 }
 
 .brand-mark {
@@ -506,6 +500,13 @@ h3 {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.pricing-content h3 {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
 }
 
 .price-card {
@@ -528,6 +529,13 @@ h3 {
   text-transform: uppercase;
   letter-spacing: 0.12em;
   font-size: 0.7rem;
+}
+
+.best-for {
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-style: italic;
+  margin-bottom: 1rem;
 }
 
 .price-card h3 {
