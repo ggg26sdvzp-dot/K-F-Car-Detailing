@@ -167,8 +167,8 @@ h3 {
 }
 
 .brand img {
-  width: 110px;
-  height: 110px;
+  height: 64px;
+  width: auto;
   display: block;
 }
 
@@ -641,6 +641,21 @@ h3 {
 
 .contact-form-full {
   width: 100%;
+}
+
+.form-status {
+  width: 100%;
+  margin: 0.4rem 0 0;
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+
+.form-status-success {
+  color: var(--gold-soft);
+}
+
+.form-status-error {
+  color: #e88a8a;
 }
 
 .contact-layout {
