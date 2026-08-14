@@ -26,7 +26,7 @@
 */
 
 // STEP 3 ABOVE: replace this placeholder with your real Formspree endpoint.
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/xdendvyg";
 
 const yearNode = document.getElementById("year");
 const navToggle = document.querySelector(".nav-toggle");
@@ -63,20 +63,64 @@ function ensureStatusNode(form) {
   return status;
 }
 
+function formatPhoneNumber(value) {
+  const digits = value.replace(/\D/g, "").slice(0, 10);
+  if (digits.length <= 3) {
+    return digits;
+  }
+  if (digits.length <= 6) {
+    return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+  }
+  return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6, 10)}`;
+}
+
+function isValidPhoneNumber(value) {
+  return value.replace(/\D/g, "").length === 10;
+}
+
 bookingForms.forEach((bookingForm) => {
   const status = ensureStatusNode(bookingForm);
+  const phoneInput = bookingForm.querySelector('input[name="phone"]');
+
+  if (phoneInput) {
+    phoneInput.addEventListener("input", () => {
+      const formattedPhone = formatPhoneNumber(phoneInput.value);
+      phoneInput.value = formattedPhone;
+
+      if (isValidPhoneNumber(formattedPhone)) {
+        phoneInput.setCustomValidity("");
+      } else {
+        phoneInput.setCustomValidity("Please enter a valid 10-digit phone number.");
+      }
+    });
+  }
 
   bookingForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     const button = bookingForm.querySelector("button");
     const originalText = button.textContent;
+    const currentPhone = phoneInput ? phoneInput.value : "";
+
+    if (phoneInput && !isValidPhoneNumber(currentPhone)) {
+      phoneInput.focus();
+      phoneInput.setCustomValidity("Please enter a valid 10-digit phone number.");
+      phoneInput.reportValidity();
+      status.textContent = "Please enter a valid 10-digit phone number.";
+      status.classList.add("form-status-error");
+      return;
+    }
 
     if (FORMSPREE_ENDPOINT.includes("YOUR_FORM_ID")) {
       status.textContent =
         "Booking form isn't connected yet — add your Formspree endpoint in script.js.";
       status.classList.add("form-status-error");
       return;
+    }
+
+    if (phoneInput) {
+      phoneInput.value = formatPhoneNumber(currentPhone);
+      phoneInput.setCustomValidity("");
     }
 
     button.textContent = "Sending...";

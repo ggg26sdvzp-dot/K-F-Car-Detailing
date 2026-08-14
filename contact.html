@@ -48,7 +48,7 @@
       <section class="page-hero">
         <div class="container narrow">
           <h1>Request a quote and let us bring your vehicle back to life.</h1>
-          <p class="lead">Share your vehicle details, service goals, and preferred timeline so we can recommend the best treatment for your finish and budget.</p>
+          <p class="lead">Share your vehicle details, service goals, and we will get back to you shortly via email or phone.</p>
         </div>
       </section>
 
@@ -61,15 +61,35 @@
             <form class="contact-form contact-form-full" id="booking-form">
               <input type="hidden" name="_subject" value="New quote request — K&amp;F website" />
               <input type="text" name="name" placeholder="Your name" aria-label="Your name" required />
-              <input type="tel" name="phone" placeholder="Phone number" aria-label="Phone number" required />
+              <input type="tel" name="phone" placeholder="Phone number" aria-label="Phone number" inputmode="numeric" required />
+              <input type="email" name="email" placeholder="Email (optional)" aria-label="Email address" />
               <input type="text" name="vehicle" placeholder="Vehicle make/model" aria-label="Vehicle make and model" />
-              <select name="service" aria-label="Select a service">
-                <option value="">Choose a service</option>
-                <option>Basic Wash</option>
-                <option>Silver Package</option>
-                <option>Gold Package</option>
-                <option>Platinum Package</option>  
+              <select name="service" aria-label="Select a service" required>
+                <option value="">Choose a package</option>
+                <option value=" Sedan Silver Package — $85">Sedan Silver Package — $85</option>
+                <option value="Sedan Gold Package — $135">Sedan Gold Package — $135</option>
+                <option value="Sedan Platinum Package — $175">Sedan Platinum Package — $175</option>
+                <option value="SUV Silver Package — $110">SUV Silver Package — $110</option>
+                <option value="SUV Gold Package — $160">SUV Gold Package — $160</option>
+                <option value="SUV Platinum Package — $210">SUV Platinum Package — $210</option>
               </select>
+
+              <fieldset class="contact-preference">
+                <legend>Preferred contact method</legend>
+                <label>
+                  <input type="checkbox" name="contact_preference" value="Email" />
+                  <span>Email</span>
+                </label>
+                <label>
+                  <input type="checkbox" name="contact_preference" value="Text" checked />
+                  <span>Text</span>
+                </label>
+                <label>
+                  <input type="checkbox" name="contact_preference" value="Phone call" />
+                  <span>Phone call</span>
+                </label>
+              </fieldset>
+
               <textarea name="details" rows="5" placeholder="Tell us about your vehicle and detailing goals" aria-label="Project details"></textarea>
               <button type="submit" class="btn btn-primary">Request Quote</button>
             </form>
@@ -77,7 +97,7 @@
 
           <aside class="contact-info">
             <div class="info-box">
-              <h3>Ready to get started?</h3>
+              <h3>Book an Appointment</h3>
               <!-- Update your actual phone, email, hours, and address here -->
               <ul class="check-list compact-list">
                 <li>Phone: (614)-816-6209 or (614)-377-6519</li>

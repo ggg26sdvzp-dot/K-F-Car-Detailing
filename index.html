@@ -325,11 +325,39 @@
             <p>Tell us about your car, your goals, and the level of protection you want. We’ll help you choose the best detailing package.</p>
           </div>
 
-          <!-- Replace this form with your real booking/contact details -->
           <form class="contact-form" id="booking-form">
             <input type="hidden" name="_subject" value="New quote request — K&amp;F website" />
             <input type="text" name="name" placeholder="Your name" aria-label="Your name" required />
-            <input type="tel" name="phone" placeholder="Phone number" aria-label="Phone number" required />
+            <input type="tel" name="phone" placeholder="Phone number" aria-label="Phone number" inputmode="numeric" required />
+            <input type="email" name="email" placeholder="Email (optional)" aria-label="Email address" />
+            <input type="text" name="vehicle" placeholder="Vehicle make/model" aria-label="Vehicle make and model" />
+            <select name="service" aria-label="Select a service" required>
+              <option value="">Choose a package</option>
+              <option value="Basic Wash — $85">Basic Wash — $85</option>
+              <option value="Silver Package — $85">Silver Package — $85</option>
+              <option value="Gold Package — $135">Gold Package — $135</option>
+              <option value="Platinum Package — $175">Platinum Package — $175</option>
+              <option value="SUV Silver Package — $110">SUV Silver Package — $110</option>
+              <option value="SUV Gold Package — $160">SUV Gold Package — $160</option>
+              <option value="SUV Platinum Package — $210">SUV Platinum Package — $210</option>
+            </select>
+
+            <fieldset class="contact-preference">
+              <legend>Preferred contact method</legend>
+              <label>
+                <input type="radio" name="contact_preference" value="Email" />
+                <span>Email</span>
+              </label>
+              <label>
+                <input type="radio" name="contact_preference" value="Text" checked />
+                <span>Text</span>
+              </label>
+              <label>
+                <input type="radio" name="contact_preference" value="Phone call" />
+                <span>Phone call</span>
+              </label>
+            </fieldset>
+
             <button type="submit" class="btn btn-primary">Request Quote</button>
           </form>
         </div>

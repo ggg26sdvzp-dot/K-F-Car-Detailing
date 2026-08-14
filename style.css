@@ -639,6 +639,35 @@ h3 {
   width: 100%;
 }
 
+.contact-preference {
+  width: 100%;
+  margin: 0;
+  padding: 0.75rem 0.25rem 0;
+  border: 0;
+}
+
+.contact-preference legend {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.contact-preference label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-right: 1rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.contact-preference input {
+  width: auto;
+  min-height: auto;
+  margin: 0;
+}
+
 .contact-form-full {
   width: 100%;
 }
@@ -660,7 +689,7 @@ h3 {
 
 .contact-layout {
   display: grid;
-  grid-template-columns: 1.3fr 0.7fr;
+  grid-template-columns: minmax(0, 1.5fr) minmax(260px, 0.9fr);
   gap: 2rem;
   align-items: start;
 }
@@ -671,6 +700,14 @@ h3 {
   border-radius: var(--radius);
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid var(--line);
+}
+
+.contact-info {
+  width: 100%;
+}
+
+.info-box {
+  min-height: 220px;
 }
 
 .about-grid {
@@ -695,6 +732,10 @@ h3 {
 
 .compact-list {
   margin-top: 1rem;
+}
+
+.check-list.compact-list li {
+  white-space: nowrap;
 }
 
 .site-footer {
@@ -730,6 +771,10 @@ body.page-loaded main {
 }
 
 @media (max-width: 980px) {
+  .check-list.compact-list li {
+    white-space: normal;
+  }
+
   .hero-grid,
   .process-grid,
   .cta-box,
