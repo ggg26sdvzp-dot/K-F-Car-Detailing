@@ -330,7 +330,11 @@
             <input type="text" name="name" placeholder="Your name" aria-label="Your name" required />
             <input type="tel" name="phone" placeholder="Phone number" aria-label="Phone number" inputmode="numeric" required />
             <input type="email" name="email" placeholder="Email (optional)" aria-label="Email address" />
-            <input type="text" name="vehicle" placeholder="Vehicle make/model" aria-label="Vehicle make and model" />
+            <select name="vehicle" aria-label="Select your vehicle type" required>
+              <option value="">Choose vehicle type</option>
+              <option value="Sedan">Sedan</option>
+              <option value="SUV">SUV</option>
+            </select>
             <select name="service" aria-label="Select a service" required>
               <option value="">Choose a package</option>
               <option value="Basic Wash — $85">Basic Wash — $85</option>

@@ -662,9 +662,17 @@ h3 {
   font-size: 0.95rem;
 }
 
-.contact-preference input {
-  width: auto;
+.contact-preference input[type="radio"],
+.contact-preference input[type="checkbox"] {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  min-height: auto;
   margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  accent-color: var(--gold-soft);
 }
 
 .contact-form-full {
