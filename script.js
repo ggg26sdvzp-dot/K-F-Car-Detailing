@@ -161,6 +161,68 @@ document.addEventListener("DOMContentLoaded", () => {
   requestAnimationFrame(() => document.body.classList.add("page-loaded"));
 });
 
+// Gallery slideshow (gallery.html)
+const slideshow = document.querySelector(".slideshow");
+if (slideshow) {
+  const track = slideshow.querySelector(".slideshow-track");
+  const slides = Array.from(slideshow.querySelectorAll(".slide"));
+  const dotsWrap = slideshow.querySelector(".slide-dots");
+  const prevBtn = slideshow.querySelector(".slide-prev");
+  const nextBtn = slideshow.querySelector(".slide-next");
+  let index = 0;
+  let autoplayTimer = null;
+
+  slides.forEach((_, i) => {
+    const dot = document.createElement("button");
+    dot.type = "button";
+    dot.className = "slide-dot";
+    dot.setAttribute("aria-label", `Go to image ${i + 1}`);
+    dot.addEventListener("click", () => goTo(i));
+    dotsWrap.appendChild(dot);
+  });
+  const dots = Array.from(dotsWrap.children);
+
+  function render() {
+    track.style.transform = `translateX(-${index * 100}%)`;
+    dots.forEach((dot, i) => dot.classList.toggle("is-active", i === index));
+  }
+
+  function goTo(i) {
+    index = (i + slides.length) % slides.length;
+    render();
+  }
+
+  function startAutoplay() {
+    autoplayTimer = setInterval(() => goTo(index + 1), 5000);
+  }
+
+  function stopAutoplay() {
+    clearInterval(autoplayTimer);
+  }
+
+  if (prevBtn) {
+    prevBtn.addEventListener("click", () => {
+      goTo(index - 1);
+      stopAutoplay();
+      startAutoplay();
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener("click", () => {
+      goTo(index + 1);
+      stopAutoplay();
+      startAutoplay();
+    });
+  }
+
+  slideshow.addEventListener("mouseenter", stopAutoplay);
+  slideshow.addEventListener("mouseleave", startAutoplay);
+
+  render();
+  startAutoplay();
+}
+
 /*
   WANT A TEXT MESSAGE INSTEAD OF (OR IN ADDITION TO) EMAIL?
   -----------------------------------------------------------
