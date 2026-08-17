@@ -330,56 +330,84 @@
       </section>
 
       <!-- CONTACT US SECTION -->
-      <section id="contact" class="section cta-section">
-        <div class="container cta-box">
-          <div class="cta-copy">
-            <h2>Give your vehicle the attention it deserves.</h2>
-            <p>Tell us about your car, your goals, and the level of protection you want. We’ll help you choose the best detailing package.</p>
+        <!-- CONTACT FORM PAGE -->
+      <section class="section">
+        <div class="container contact-layout">
+          <div class="contact-card">
+            <h2>Tell us about your vehicle</h2>
+            <!-- Replace with your real form action or booking fields -->
+            <form class="contact-form contact-form-full" id="booking-form">
+              <input type="hidden" name="_subject" value="New quote request — K&amp;F website" />
+              <input type="text" name="name" placeholder="Your name" aria-label="Your name" required />
+              <input type="tel" name="phone" placeholder="Phone number" aria-label="Phone number" inputmode="numeric" required />
+              <input type="email" name="email" placeholder="Email (optional)" aria-label="Email address" />
+              <select name="vehicle" aria-label="Select your vehicle type" required>
+                <option value="">Choose vehicle type</option>
+                <option value="Sedan">Sedan</option>
+                <option value="SUV">SUV</option>
+              </select>
+              <select name="package" aria-label="Select your service package" required>
+                <option value="">Choose a package</option>
+                <option value="Sedan Silver Package — $85">Sedan Silver Package — $85</option>
+                <option value="Sedan Gold Package — $135">Sedan Gold Package — $135</option>
+                <option value="Sedan Platinum Package — $175">Sedan Platinum Package — $175</option>
+                <option value="SUV Silver Package — $110">SUV Silver Package — $110</option>
+                <option value="SUV Gold Package — $160">SUV Gold Package — $160</option>
+                <option value="SUV Platinum Package — $210">SUV Platinum Package — $210</option>
+              </select>
+
+              <fieldset class="contact-preference">
+                <legend>Additional Services (optional)</legend>
+                <label>
+                  <input type="checkbox" name="additional_services" value="Engine Bay Cleaning — $85" />
+                  <span>Engine Bay Cleaning — $85</span>
+                </label>
+                <label>
+                  <input type="checkbox" name="additional_services" value="Paint Protection (1-6 Mo) — $75" />
+                  <span>Paint Protection (Sedan) (1-6 Mo) — $75</span>
+                </label>
+                <label>
+                  <input type="checkbox" name="additional_services" value="Paint Protection SUV (1-6 Mo) — $85" />
+                  <span>Paint Protection (SUV) (1-6 Mo) — $85</span>
+                </label>
+                <label>
+                  <input type="checkbox" name="additional_services" value="Headlights Restoration — $80" />
+                  <span>Headlights Restoration — $80</span>
+                </label>
+              </fieldset>
+
+              <fieldset class="contact-preference">
+                <legend>Preferred contact method</legend>
+                <label>
+                  <input type="checkbox" name="contact_preference" value="Email" />
+                  <span>Email</span>
+                </label>
+                <label>
+                  <input type="checkbox" name="contact_preference" value="Text" checked />
+                  <span>Text</span>
+                </label>
+                <label>
+                  <input type="checkbox" name="contact_preference" value="Phone call" /> <span>Phone call</span>
+                </label>
+              </fieldset>
+
+              <textarea name="details" rows="5" placeholder="Tell us about your vehicle and detailing goals" aria-label="Project details"></textarea>
+              <button type="submit" class="btn btn-primary">Request Quote</button>
+            </form>
           </div>
 
-          <form class="contact-form" id="booking-form">
-            <input type="hidden" name="_subject" value="New quote request — K&amp;F website" />
-            <input type="text" name="name" placeholder="Your name" aria-label="Your name" required />
-            <input type="tel" name="phone" placeholder="Phone number" aria-label="Phone number" inputmode="numeric" required />
-            <input type="email" name="email" placeholder="Email (optional)" aria-label="Email address" />
-            <select name="vehicle" aria-label="Select your vehicle type" required>
-              <option value="">Choose vehicle type</option>
-              <option value="Sedan">Sedan</option>
-              <option value="SUV">SUV</option>
-            </select>
-            <select name="service" aria-label="Select a service" required>
-              <option value="">Choose a package</option>
-              <option value="Basic Wash — $85">Basic Wash — $85</option>
-              <option value="Silver Package — $85">Silver Package — $85</option>
-              <option value="Gold Package — $135">Gold Package — $135</option>
-              <option value="Platinum Package — $175">Platinum Package — $175</option>
-              <option value="SUV Silver Package — $110">SUV Silver Package — $110</option>
-              <option value="SUV Gold Package — $160">SUV Gold Package — $160</option>
-              <option value="SUV Platinum Package — $210">SUV Platinum Package — $210</option>
-              <option value="Engine Bay Cleaning — $85">Engine Bay Cleaning — $85</option>
-              <option value="Paint Protection (1-6 Mo) — $75">Paint Protection (1-6 Mo) — $75</option>
-              <option value="Paint Protection SUV (1-6 Mo) — $85">Paint Protection SUV (1-6 Mo) — $85</option>
-              <option value="Headlights Restoration — $80">Headlights Restoration — $80</option>
-            </select>
-
-            <fieldset class="contact-preference">
-              <legend>Preferred contact method</legend>
-              <label>
-                <input type="radio" name="contact_preference" value="Email" />
-                <span>Email</span>
-              </label>
-              <label>
-                <input type="radio" name="contact_preference" value="Text" checked />
-                <span>Text</span>
-              </label>
-              <label>
-                <input type="radio" name="contact_preference" value="Phone call" />
-                <span>Phone call</span>
-              </label>
-            </fieldset>
-
-            <button type="submit" class="btn btn-primary">Request Quote</button>
-          </form>
+          <aside class="contact-info">
+            <div class="info-box">
+              <h3>Book an Appointment</h3>
+              <!-- Update your actual phone, email, hours, and address here -->
+              <ul class="check-list compact-list">
+                <li>Phone: (614)-816-6209 or (614)-377-6519</li>
+                <li>Email: knfmobiledetailing614@gmail.com</li>
+                <li>Instagram: <a href="https://www.instagram.com/k_fmobiledetailing/?hl=en" target="_blank" rel="noopener noreferrer">@k_fmobiledetailing</a></li>
+                <li>Location: Columbus, OH</li>
+              </ul>
+            </div>
+          </aside>
         </div>
       </section>
     </main>
