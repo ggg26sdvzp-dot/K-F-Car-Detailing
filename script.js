@@ -193,6 +193,10 @@ if (slideshow) {
   }
 
   function startAutoplay() {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (prefersReducedMotion) return;
     autoplayTimer = setInterval(() => goTo(index + 1), 5000);
   }
 
@@ -218,6 +222,50 @@ if (slideshow) {
 
   slideshow.addEventListener("mouseenter", stopAutoplay);
   slideshow.addEventListener("mouseleave", startAutoplay);
+
+  // Touch swipe support (mobile)
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let isSwiping = false;
+
+  track.addEventListener(
+    "touchstart",
+    (event) => {
+      touchStartX = event.touches[0].clientX;
+      touchStartY = event.touches[0].clientY;
+      isSwiping = true;
+      stopAutoplay();
+    },
+    { passive: true }
+  );
+
+  track.addEventListener(
+    "touchmove",
+    (event) => {
+      if (!isSwiping) return;
+      const deltaX = event.touches[0].clientX - touchStartX;
+      const deltaY = event.touches[0].clientY - touchStartY;
+      // Only hijack the gesture once it's clearly horizontal,
+      // so vertical page scrolling still works normally.
+      if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        event.preventDefault();
+      }
+    },
+    { passive: false }
+  );
+
+  track.addEventListener("touchend", (event) => {
+    if (!isSwiping) return;
+    isSwiping = false;
+    const deltaX = event.changedTouches[0].clientX - touchStartX;
+    const SWIPE_THRESHOLD = 40;
+    if (deltaX > SWIPE_THRESHOLD) {
+      goTo(index - 1);
+    } else if (deltaX < -SWIPE_THRESHOLD) {
+      goTo(index + 1);
+    }
+    startAutoplay();
+  });
 
   render();
   startAutoplay();
