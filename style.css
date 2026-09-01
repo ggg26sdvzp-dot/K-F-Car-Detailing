@@ -573,6 +573,77 @@ h3 {
   transform: scale(1.3);
 }
 
+.gallery-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background: rgba(7, 10, 14, 0.9);
+}
+
+.gallery-fullscreen-panel {
+  position: relative;
+  width: min(1100px, 100%);
+  max-height: 92vh;
+}
+
+.gallery-fullscreen-panel img {
+  width: 100%;
+  max-height: 92vh;
+  object-fit: contain;
+  border-radius: 18px;
+  background: #0d1218;
+  box-shadow: 0 28px 60px rgba(0, 0, 0, 0.4);
+}
+
+.gallery-fullscreen-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(10, 13, 18, 0.8);
+  color: var(--text);
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+body.gallery-fullscreen-open {
+  overflow: hidden;
+}
+
+.slide img,
+.slide {
+  cursor: pointer;
+}
+
+.slide img:focus-visible {
+  outline: 2px solid var(--gold-soft);
+  outline-offset: 4px;
+}
+
+.mobile-book-cta {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 40;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 0.8rem 1.2rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-soft));
+  color: #111821;
+  font-weight: 800;
+  box-shadow: 0 18px 32px rgba(212, 166, 74, 0.25);
+}
+
 .pricing-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1000,6 +1071,10 @@ body.page-loaded main {
 
   .slide img {
     height: 300px;
+  }
+
+  .mobile-book-cta {
+    display: inline-flex;
   }
 
   .slide-arrow {

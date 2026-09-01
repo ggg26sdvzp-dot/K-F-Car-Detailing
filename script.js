@@ -171,14 +171,29 @@ if (slideshow) {
   const nextBtn = slideshow.querySelector(".slide-next");
   let index = 0;
   let autoplayTimer = null;
+  let isFullscreen = false;
 
-  slides.forEach((_, i) => {
+  slides.forEach((slide, i) => {
     const dot = document.createElement("button");
     dot.type = "button";
     dot.className = "slide-dot";
     dot.setAttribute("aria-label", `Go to image ${i + 1}`);
     dot.addEventListener("click", () => goTo(i));
     dotsWrap.appendChild(dot);
+
+    const image = slide.querySelector("img");
+    if (image) {
+      image.setAttribute("tabindex", "0");
+      image.setAttribute("role", "button");
+      image.setAttribute("aria-label", `Open fullscreen image ${i + 1}`);
+      image.addEventListener("click", () => openFullscreenImage(slide));
+      image.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          openFullscreenImage(slide);
+        }
+      });
+    }
   });
   const dots = Array.from(dotsWrap.children);
 
@@ -188,11 +203,13 @@ if (slideshow) {
   }
 
   function goTo(i) {
+    if (isFullscreen) return;
     index = (i + slides.length) % slides.length;
     render();
   }
 
   function startAutoplay() {
+    if (isFullscreen) return;
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
@@ -202,6 +219,60 @@ if (slideshow) {
 
   function stopAutoplay() {
     clearInterval(autoplayTimer);
+  }
+
+  function openFullscreenImage(slide) {
+    const image = slide.querySelector("img");
+    if (!image || isFullscreen) return;
+
+    const overlay = document.createElement("div");
+    overlay.className = "gallery-fullscreen";
+    overlay.setAttribute("role", "dialog");
+    overlay.setAttribute("aria-modal", "true");
+
+    const panel = document.createElement("div");
+    panel.className = "gallery-fullscreen-panel";
+
+    const fullImage = document.createElement("img");
+    fullImage.src = image.src;
+    fullImage.alt = image.alt;
+
+    const closeBtn = document.createElement("button");
+    closeBtn.type = "button";
+    closeBtn.className = "gallery-fullscreen-close";
+    closeBtn.setAttribute("aria-label", "Close fullscreen view");
+    closeBtn.textContent = "×";
+
+    closeBtn.addEventListener("click", closeFullscreenImage);
+    overlay.addEventListener("click", (event) => {
+      if (event.target === overlay) {
+        closeFullscreenImage();
+      }
+    });
+
+    panel.appendChild(closeBtn);
+    panel.appendChild(fullImage);
+    overlay.appendChild(panel);
+    document.body.appendChild(overlay);
+    document.body.classList.add("gallery-fullscreen-open");
+    isFullscreen = true;
+    stopAutoplay();
+
+    document.addEventListener("keydown", handleEscapeKey);
+
+    function handleEscapeKey(event) {
+      if (event.key === "Escape") {
+        closeFullscreenImage();
+      }
+    }
+
+    function closeFullscreenImage() {
+      overlay.remove();
+      document.body.classList.remove("gallery-fullscreen-open");
+      isFullscreen = false;
+      document.removeEventListener("keydown", handleEscapeKey);
+      startAutoplay();
+    }
   }
 
   if (prevBtn) {
@@ -220,8 +291,12 @@ if (slideshow) {
     });
   }
 
-  slideshow.addEventListener("mouseenter", stopAutoplay);
-  slideshow.addEventListener("mouseleave", startAutoplay);
+  slideshow.addEventListener("mouseenter", () => {
+    if (!isFullscreen) stopAutoplay();
+  });
+  slideshow.addEventListener("mouseleave", () => {
+    if (!isFullscreen) startAutoplay();
+  });
 
   // Touch swipe support (mobile)
   let touchStartX = 0;
@@ -231,6 +306,7 @@ if (slideshow) {
   track.addEventListener(
     "touchstart",
     (event) => {
+      if (isFullscreen) return;
       touchStartX = event.touches[0].clientX;
       touchStartY = event.touches[0].clientY;
       isSwiping = true;
@@ -242,7 +318,7 @@ if (slideshow) {
   track.addEventListener(
     "touchmove",
     (event) => {
-      if (!isSwiping) return;
+      if (!isSwiping || isFullscreen) return;
       const deltaX = event.touches[0].clientX - touchStartX;
       const deltaY = event.touches[0].clientY - touchStartY;
       // Only hijack the gesture once it's clearly horizontal,
@@ -255,7 +331,7 @@ if (slideshow) {
   );
 
   track.addEventListener("touchend", (event) => {
-    if (!isSwiping) return;
+    if (!isSwiping || isFullscreen) return;
     isSwiping = false;
     const deltaX = event.changedTouches[0].clientX - touchStartX;
     const SWIPE_THRESHOLD = 40;
