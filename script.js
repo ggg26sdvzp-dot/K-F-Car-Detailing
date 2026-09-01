@@ -165,13 +165,17 @@ document.addEventListener("DOMContentLoaded", () => {
 const slideshow = document.querySelector(".slideshow");
 if (slideshow) {
   const track = slideshow.querySelector(".slideshow-track");
-  const slides = Array.from(slideshow.querySelectorAll(".slide"));
+  const slides = Array.from(track ? track.querySelectorAll(".slide") : []);
   const dotsWrap = slideshow.querySelector(".slide-dots");
   const prevBtn = slideshow.querySelector(".slide-prev");
   const nextBtn = slideshow.querySelector(".slide-next");
-  let index = 0;
-  let autoplayTimer = null;
-  let isFullscreen = false;
+
+  if (!track || slides.length === 0) {
+    console.warn("Gallery slideshow skipped: missing slideshow track or slides.");
+  } else {
+    let index = 0;
+    let autoplayTimer = null;
+    let isFullscreen = false;
 
   slides.forEach((slide, i) => {
     const dot = document.createElement("button");
@@ -343,8 +347,9 @@ if (slideshow) {
     startAutoplay();
   });
 
-  render();
-  startAutoplay();
+    render();
+    startAutoplay();
+  }
 }
 
 /*

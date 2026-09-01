@@ -60,6 +60,25 @@ K-F-Car-Detailing/
 - **Form Handling**: Booking form with vehicle and service options
 - **SEO Optimized**: Meta descriptions and semantic HTML
 
+## Add-On Services
+
+- Engine Bay Cleaning — $85
+  - Deep clean and degrease engine components for a fresh, like-new look.
+- Clay Bar Treatment — $120
+  - Removes bonded contaminants for a smoother finish.
+- Interior Deep Cleaning — $120
+  - Deep clean of all interior surfaces for a like-new feel.
+- Exterior Waxing — $85
+  - Adds shine and protection to your paint.
+- Paint Protection — $75
+  - 1–6 Months
+  - Adds a protective barrier to your vehicle's paint to help repel water, dirt, and UV rays.
+- SUV Paint Protection — $85
+  - 1–6 Months
+  - Specially formulated protection for SUVs to help keep your paint looking its best.
+- Headlight Restoration — $80
+  - Removes haze and oxidation to restore clarity and improve visibility.
+
 ## Images
 
 The site includes 15+ high-quality photos:
