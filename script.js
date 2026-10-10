@@ -165,187 +165,236 @@ document.addEventListener("DOMContentLoaded", () => {
 const slideshow = document.querySelector(".slideshow");
 if (slideshow) {
   const track = slideshow.querySelector(".slideshow-track");
-  const slides = Array.from(track ? track.querySelectorAll(".slide") : []);
   const dotsWrap = slideshow.querySelector(".slide-dots");
   const prevBtn = slideshow.querySelector(".slide-prev");
   const nextBtn = slideshow.querySelector(".slide-next");
 
-  if (!track || slides.length === 0) {
-    console.warn("Gallery slideshow skipped: missing slideshow track or slides.");
+  const galleryMedia = [
+    { type: "image", src: "images&videos/businessinfo/octoberflyer.png", alt: "October promotional flyer" },
+    { type: "image", src: "images&videos/businessinfo/kfpackages.PNG", alt: "K&F Car Detailing service packages" },
+    { type: "video", src: "images&videos/carsreel/IMG_6855.MOV", poster: "images&videos/carsreel/IMG_6855.JPEG", alt: "Detailing video preview" },
+    { type: "video", src: "images&videos/carsreel/IMG_6856.MOV", poster: "images&videos/carsreel/IMG_6856.JPEG", alt: "Detailing work showcase video" },
+    { type: "video", src: "images&videos/carsreel/IMG_6857.MOV", poster: "images&videos/carsreel/IMG_6857.JPEG", alt: "Vehicle detail video" },
+    { type: "image", src: "images&videos/carsreel/cleaningfrontofcar.JPEG", alt: "Professional front car cleaning" },
+    { type: "image", src: "images&videos/carsreel/cleaningfrontofcar2.JPEG", alt: "Front bumper detail result" },
+    { type: "image", src: "images&videos/carsreel/foamonbackcar.JPEG", alt: "Foam application on the back of the vehicle" },
+    { type: "image", src: "images&videos/carsreel/foamonbackcar2.JPEG", alt: "Foam detail on vehicle exterior" },
+    { type: "image", src: "images&videos/carsreel/foamoncar.JPEG", alt: "Foam treatment across the car" },
+    { type: "image", src: "images&videos/carsreel/resultoffront.JPEG", alt: "Detailing result of front of car" },
+    { type: "image", src: "images&videos/carsreel/resultofengine.JPEG", alt: "Detailing result of the engine bay" },
+    { type: "image", src: "images&videos/carsreel/resultoffrantofcarwithdoorsclosed.JPEG", alt: "Finished car detail with doors closed" },
+    { type: "image", src: "images&videos/carsreel/dashboardresultofcar.JPEG", alt: "Dashboard detailing result" },
+    { type: "image", src: "images&videos/carsreel/driverseatresult.JPEG", alt: "Driver seat detailing result" },
+    { type: "image", src: "images&videos/carsreel/insidefrontresult.JPEG", alt: "Inside front detailing result" },
+    { type: "image", src: "images&videos/carsreel/backseatresult.JPEG", alt: "Back seat detailing result" }
+  ];
+
+  if (!track) {
+    console.warn("Gallery slideshow skipped: missing slideshow track.");
   } else {
+    const slides = [];
+
+    galleryMedia.forEach((item, i) => {
+      const slide = document.createElement("figure");
+      slide.className = "slide";
+      const media = item.type === "video" ? document.createElement("video") : document.createElement("img");
+
+      if (item.type === "video") {
+        media.src = item.src;
+        media.poster = item.poster;
+        media.controls = true;
+        media.muted = true;
+        media.loop = true;
+        media.autoplay = true;
+        media.playsInline = true;
+        media.preload = "metadata";
+      } else {
+        media.src = item.src;
+        media.alt = item.alt;
+        media.loading = "lazy";
+        media.decoding = "async";
+      }
+
+      media.setAttribute("aria-label", item.alt);
+      media.setAttribute("tabindex", "0");
+      media.setAttribute("role", "button");
+      media.addEventListener("click", () => openFullscreenMedia(slide));
+      media.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          openFullscreenMedia(slide);
+        }
+      });
+
+      slide.appendChild(media);
+      track.appendChild(slide);
+      slides.push(slide);
+
+      const dot = document.createElement("button");
+      dot.type = "button";
+      dot.className = "slide-dot";
+      dot.setAttribute("aria-label", `Go to image ${i + 1}`);
+      dot.addEventListener("click", () => goTo(i));
+      dotsWrap.appendChild(dot);
+    });
+
     let index = 0;
     let autoplayTimer = null;
     let isFullscreen = false;
+    const dots = Array.from(dotsWrap.children);
 
-  slides.forEach((slide, i) => {
-    const dot = document.createElement("button");
-    dot.type = "button";
-    dot.className = "slide-dot";
-    dot.setAttribute("aria-label", `Go to image ${i + 1}`);
-    dot.addEventListener("click", () => goTo(i));
-    dotsWrap.appendChild(dot);
+    function render() {
+      track.style.transform = `translateX(-${index * 100}%)`;
+      dots.forEach((dot, i) => dot.classList.toggle("is-active", i === index));
+    }
 
-    const image = slide.querySelector("img");
-    if (image) {
-      image.setAttribute("tabindex", "0");
-      image.setAttribute("role", "button");
-      image.setAttribute("aria-label", `Open fullscreen image ${i + 1}`);
-      image.addEventListener("click", () => openFullscreenImage(slide));
-      image.addEventListener("keydown", (event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          openFullscreenImage(slide);
+    function goTo(i) {
+      if (isFullscreen) return;
+      index = (i + slides.length) % slides.length;
+      render();
+    }
+
+    function startAutoplay() {
+      if (isFullscreen || slides.length < 2) return;
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (prefersReducedMotion) return;
+      clearInterval(autoplayTimer);
+      autoplayTimer = setInterval(() => goTo(index + 1), 5000);
+    }
+
+    function stopAutoplay() {
+      clearInterval(autoplayTimer);
+    }
+
+    function openFullscreenMedia(slide) {
+      const media = slide.querySelector("img, video");
+      if (!media || isFullscreen) return;
+
+      const overlay = document.createElement("div");
+      overlay.className = "gallery-fullscreen";
+      overlay.setAttribute("role", "dialog");
+      overlay.setAttribute("aria-modal", "true");
+
+      const panel = document.createElement("div");
+      panel.className = "gallery-fullscreen-panel";
+
+      const fullMedia = media.tagName === "VIDEO" ? document.createElement("video") : document.createElement("img");
+
+      if (fullMedia.tagName === "VIDEO") {
+        fullMedia.src = media.src;
+        fullMedia.poster = media.poster;
+        fullMedia.controls = true;
+        fullMedia.autoplay = true;
+        fullMedia.muted = true;
+        fullMedia.loop = true;
+        fullMedia.playsInline = true;
+      } else {
+        fullMedia.src = media.src;
+        fullMedia.alt = media.alt;
+      }
+
+      const closeBtn = document.createElement("button");
+      closeBtn.type = "button";
+      closeBtn.className = "gallery-fullscreen-close";
+      closeBtn.setAttribute("aria-label", "Close fullscreen view");
+      closeBtn.textContent = "×";
+
+      closeBtn.addEventListener("click", closeFullscreenMedia);
+      overlay.addEventListener("click", (event) => {
+        if (event.target === overlay) {
+          closeFullscreenMedia();
         }
       });
-    }
-  });
-  const dots = Array.from(dotsWrap.children);
 
-  function render() {
-    track.style.transform = `translateX(-${index * 100}%)`;
-    dots.forEach((dot, i) => dot.classList.toggle("is-active", i === index));
-  }
+      panel.appendChild(closeBtn);
+      panel.appendChild(fullMedia);
+      overlay.appendChild(panel);
+      document.body.appendChild(overlay);
+      document.body.classList.add("gallery-fullscreen-open");
+      isFullscreen = true;
+      stopAutoplay();
 
-  function goTo(i) {
-    if (isFullscreen) return;
-    index = (i + slides.length) % slides.length;
-    render();
-  }
+      document.addEventListener("keydown", handleEscapeKey);
 
-  function startAutoplay() {
-    if (isFullscreen) return;
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-    if (prefersReducedMotion) return;
-    autoplayTimer = setInterval(() => goTo(index + 1), 5000);
-  }
-
-  function stopAutoplay() {
-    clearInterval(autoplayTimer);
-  }
-
-  function openFullscreenImage(slide) {
-    const image = slide.querySelector("img");
-    if (!image || isFullscreen) return;
-
-    const overlay = document.createElement("div");
-    overlay.className = "gallery-fullscreen";
-    overlay.setAttribute("role", "dialog");
-    overlay.setAttribute("aria-modal", "true");
-
-    const panel = document.createElement("div");
-    panel.className = "gallery-fullscreen-panel";
-
-    const fullImage = document.createElement("img");
-    fullImage.src = image.src;
-    fullImage.alt = image.alt;
-
-    const closeBtn = document.createElement("button");
-    closeBtn.type = "button";
-    closeBtn.className = "gallery-fullscreen-close";
-    closeBtn.setAttribute("aria-label", "Close fullscreen view");
-    closeBtn.textContent = "×";
-
-    closeBtn.addEventListener("click", closeFullscreenImage);
-    overlay.addEventListener("click", (event) => {
-      if (event.target === overlay) {
-        closeFullscreenImage();
+      function handleEscapeKey(event) {
+        if (event.key === "Escape") {
+          closeFullscreenMedia();
+        }
       }
-    });
 
-    panel.appendChild(closeBtn);
-    panel.appendChild(fullImage);
-    overlay.appendChild(panel);
-    document.body.appendChild(overlay);
-    document.body.classList.add("gallery-fullscreen-open");
-    isFullscreen = true;
-    stopAutoplay();
-
-    document.addEventListener("keydown", handleEscapeKey);
-
-    function handleEscapeKey(event) {
-      if (event.key === "Escape") {
-        closeFullscreenImage();
+      function closeFullscreenMedia() {
+        overlay.remove();
+        document.body.classList.remove("gallery-fullscreen-open");
+        isFullscreen = false;
+        document.removeEventListener("keydown", handleEscapeKey);
+        startAutoplay();
       }
     }
 
-    function closeFullscreenImage() {
-      overlay.remove();
-      document.body.classList.remove("gallery-fullscreen-open");
-      isFullscreen = false;
-      document.removeEventListener("keydown", handleEscapeKey);
-      startAutoplay();
+    if (prevBtn) {
+      prevBtn.addEventListener("click", () => {
+        goTo(index - 1);
+        stopAutoplay();
+        startAutoplay();
+      });
     }
-  }
 
-  if (prevBtn) {
-    prevBtn.addEventListener("click", () => {
-      goTo(index - 1);
-      stopAutoplay();
-      startAutoplay();
+    if (nextBtn) {
+      nextBtn.addEventListener("click", () => {
+        goTo(index + 1);
+        stopAutoplay();
+        startAutoplay();
+      });
+    }
+
+    slideshow.addEventListener("mouseenter", () => {
+      if (!isFullscreen) stopAutoplay();
     });
-  }
-
-  if (nextBtn) {
-    nextBtn.addEventListener("click", () => {
-      goTo(index + 1);
-      stopAutoplay();
-      startAutoplay();
+    slideshow.addEventListener("mouseleave", () => {
+      if (!isFullscreen) startAutoplay();
     });
-  }
 
-  slideshow.addEventListener("mouseenter", () => {
-    if (!isFullscreen) stopAutoplay();
-  });
-  slideshow.addEventListener("mouseleave", () => {
-    if (!isFullscreen) startAutoplay();
-  });
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let isSwiping = false;
 
-  // Touch swipe support (mobile)
-  let touchStartX = 0;
-  let touchStartY = 0;
-  let isSwiping = false;
+    track.addEventListener(
+      "touchstart",
+      (event) => {
+        if (isFullscreen) return;
+        touchStartX = event.touches[0].clientX;
+        touchStartY = event.touches[0].clientY;
+        isSwiping = true;
+        stopAutoplay();
+      },
+      { passive: true }
+    );
 
-  track.addEventListener(
-    "touchstart",
-    (event) => {
-      if (isFullscreen) return;
-      touchStartX = event.touches[0].clientX;
-      touchStartY = event.touches[0].clientY;
-      isSwiping = true;
-      stopAutoplay();
-    },
-    { passive: true }
-  );
+    track.addEventListener(
+      "touchmove",
+      (event) => {
+        if (!isSwiping || isFullscreen) return;
+        const deltaX = event.touches[0].clientX - touchStartX;
+        const deltaY = event.touches[0].clientY - touchStartY;
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+          event.preventDefault();
+        }
+      },
+      { passive: false }
+    );
 
-  track.addEventListener(
-    "touchmove",
-    (event) => {
+    track.addEventListener("touchend", (event) => {
       if (!isSwiping || isFullscreen) return;
-      const deltaX = event.touches[0].clientX - touchStartX;
-      const deltaY = event.touches[0].clientY - touchStartY;
-      // Only hijack the gesture once it's clearly horizontal,
-      // so vertical page scrolling still works normally.
-      if (Math.abs(deltaX) > Math.abs(deltaY)) {
-        event.preventDefault();
+      isSwiping = false;
+      const deltaX = event.changedTouches[0].clientX - touchStartX;
+      const SWIPE_THRESHOLD = 40;
+      if (deltaX > SWIPE_THRESHOLD) {
+        goTo(index - 1);
+      } else if (deltaX < -SWIPE_THRESHOLD) {
+        goTo(index + 1);
       }
-    },
-    { passive: false }
-  );
-
-  track.addEventListener("touchend", (event) => {
-    if (!isSwiping || isFullscreen) return;
-    isSwiping = false;
-    const deltaX = event.changedTouches[0].clientX - touchStartX;
-    const SWIPE_THRESHOLD = 40;
-    if (deltaX > SWIPE_THRESHOLD) {
-      goTo(index - 1);
-    } else if (deltaX < -SWIPE_THRESHOLD) {
-      goTo(index + 1);
-    }
-    startAutoplay();
-  });
+      startAutoplay();
+    });
 
     render();
     startAutoplay();
